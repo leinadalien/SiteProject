@@ -5,5 +5,5 @@ from django.shortcuts import render
 def index(request):
     return HttpResponse("Forum page")
 
-def categories(request):
-    return HttpResponse("Categories page")
+def categories(request, cat):
+    return HttpResponse(f"Category num {cat}")
