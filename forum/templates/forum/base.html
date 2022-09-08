@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{itle}}</title>
+    <link type="text/css" href="{% static 'forum/css/styles.css' %}" rel="stylesheet"/>
+</head>
+<body>
+{% block main-menu %}
+<ul>
+  {% for item in menu %}
+  <li>{{item}}</li>
+  {% endfor %}
+</ul>
+{% endblock main-menu %}
+
+{% block content %}
+{% endblock content %}
+</body>
+</html>
