@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from .models import *
 
-menu = ["About", "Ask question", "log in"]
+menu = ["About", "log in"]
 
 
 # Create your views here.

@@ -1,21 +1,44 @@
+<!-- new  base-->
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{itle}}</title>
-    <link type="text/css" href="{% static 'forum/css/styles.css' %}" rel="stylesheet"/>
-</head>
-<body>
-{% block main-menu %}
-<ul>
-  {% for item in menu %}
-  <li>{{item}}</li>
-  {% endfor %}
-</ul>
-{% endblock main-menu %}
+<html>
+	<head>
+		<title>{{title}}</title>
+		<link type="text/css" href="{% static 'forum/css/styles.css' %}" rel="stylesheet" />
+		<meta charset=utf-8">
+	</head>
+	<body>
+		<header>
+			{% block main-menu %}
+				<nav>
+					<a href="#">Forum</a>
+					{% for m in menu %}
+					<a href="#">{{m.title}}</a>
+					{% endfor %}
+				</nav>
+			{% endblock main-menu %}
+		</header>
+		<!--content block -->
+		<section class="content">
+			{% block content %}
+			{% endblock content %}
+		</section>
+		<!-- end of content block-->
+		<!-- right sidebar -->
+		<aside>
+			<p>Темы</p>
+			<ul>
+				<li><a href="#">IT сфера</a></li>
+				<li><a href="#">Садоводство</a></li>
+			</ul>
+		</aside>
+		<!-- end of right sidebar -->
 
-{% block content %}
-{% endblock content %}
-</body>
+		<footer>
+			<div>
+				<small>&copy; leinadalien company</small>
+			</div>
+		</footer>
+	<!-- Конец footer'а и страницы -->
+	</body>
 </html>
