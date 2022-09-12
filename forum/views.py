@@ -3,8 +3,10 @@ from django.shortcuts import render, get_object_or_404
 from .models import *
 
 menu = [
-    {'title': 'About', 'url_name': 'about'},
-    {'title': 'Log in', 'url_name': 'login'}
+    {'title': 'О сайте', 'url_name': 'about'},
+    {'title': 'Начать обсуждение', 'url_name': 'start_theme'},
+    {'title': 'Мои вопросы', 'url_name': 'my_themes'},
+    {'title': 'Войти', 'url_name': 'login'}
 ]
 
 
@@ -62,3 +64,11 @@ def show_theme(request, theme_slug):
         'title': theme
     }
     return render(request, 'forum/index.html', context=context)
+
+
+def start_theme(request):
+    return HttpResponse("start theme")
+
+
+def my_themes(request):
+    return  HttpResponse("my themes")
