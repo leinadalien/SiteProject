@@ -1,5 +1,5 @@
 from django.http import HttpResponse, Http404
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import *
 
 menu = [
@@ -35,19 +35,30 @@ def login(request):
 
 
 def show_post(request, post_slug):
-    return HttpResponse(f'post by slug: {post_slug}')
+    post = get_object_or_404(Publication, slug=post_slug)
+    themes = Theme.objects.all()
+    context = {
+        'post': post,
+        'menu': menu,
+        'title': post.title,
+        'themes': themes,
+        'theme_selected': post.theme.slug
+    }
+    return render(request, 'forum/post.html', context=context)
 
 
 def show_theme(request, theme_slug):
-    posts = Publication.objects.filter(theme_id=theme_slug)
+    theme = get_object_or_404(Theme, slug=theme_slug)
+    posts = Publication.objects.filter(theme=theme)
     themes = Theme.objects.all()
+
     if len(posts) == 0:
         raise Http404()
     context = {
         'posts': posts,
         'themes': themes,
-        'theme_selected': theme_slug,
+        'theme_selected': theme.pk,
         'menu': menu,
-        'title': 'Main'
+        'title': theme
     }
     return render(request, 'forum/index.html', context=context)

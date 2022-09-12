@@ -14,7 +14,7 @@ class Publication(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('post', kwargs={'post_slug': self.pk})
+        return reverse('post', kwargs={'post_slug': self.slug})
 
     class Meta:
         verbose_name = 'Публикациия'
@@ -29,7 +29,7 @@ class Theme(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('theme', kwargs={'theme_slug': self.pk})
+        return reverse('theme', kwargs={'theme_slug': self.slug})
 
     class Meta:
         verbose_name = 'Тема'
