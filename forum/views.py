@@ -1,6 +1,6 @@
 from django.http import HttpResponse, Http404
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import ListView, DetailView, CreateView
 from .forms import *
 from .models import *
 
@@ -41,68 +41,48 @@ def login(request):
     return HttpResponse('log in')
 
 
-def show_post(request, post_slug):
-    post = get_object_or_404(Publication, slug=post_slug)
-    themes = Theme.objects.all()
-    context = {
-        'post': post,
-        'menu': menu,
-        'title': post.title,
-        'themes': themes,
-        'theme_selected': post.theme.slug
-    }
-    return render(request, 'forum/post.html', context=context)
+class ShowPost(DetailView):
+    model = Publication
+    template_name = 'forum/post.html'
+    slug_url_kwarg = 'post_slug'
+    context_object_name = 'post'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu'] = menu
+        context['title'] = context['post']
+        context['themes'] = Theme.objects.all()
+        return context
 
 
 class PublicationByTheme(ListView):
     model = Publication
     template_name = 'forum/index.html'
     context_object_name = 'posts'
+    allow_empty = False
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['menu'] = menu
-        context['title'] = 'Главная'
+        context['title'] = context['posts'][0].theme
         context['themes'] = Theme.objects.all()
-        context['theme_selected'] = 0  #need change
+        context['theme_selected'] = context['posts'][0].theme_id
         return context
 
     def get_queryset(self):
         return Publication.objects.filter(theme__slug=self.kwargs['theme_slug'], is_published=True)
 
 
-def show_theme(request, theme_slug):
-    theme = get_object_or_404(Theme, slug=theme_slug)
-    posts = Publication.objects.filter(theme=theme)
-    themes = Theme.objects.all()
+class StartQuestion(CreateView):
+    form_class = StartQuestionForm
+    template_name = 'forum/start_question.html'
 
-    if len(posts) == 0:
-        raise Http404()
-    context = {
-        'posts': posts,
-        'themes': themes,
-        'theme_selected': theme.pk,
-        'menu': menu,
-        'title': theme
-    }
-    return render(request, 'forum/index.html', context=context)
-
-
-def start_question(request):
-    if request.method == 'POST':
-        form = StartThemeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return index(request)
-    else:
-        form = StartThemeForm()
-    context = {
-        'form': form,
-        'menu': menu,
-        'title': 'Создание Вопроса',
-        'themes': Theme.objects.all()
-    }
-    return render(request, 'forum/start_question.html', context=context)
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu'] = menu
+        context['title'] = 'Создание вопроса'
+        context['themes'] = Theme.objects.all()
+        return context
 
 
 def my_questions(request):

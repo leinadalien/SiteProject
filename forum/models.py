@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-
+from forum.unique_slugify import unique_slugify
 
 class Publication(models.Model):
     title = models.CharField(max_length=255, verbose_name="Заголовок")
@@ -15,6 +15,10 @@ class Publication(models.Model):
 
     def get_absolute_url(self):
         return reverse('post', kwargs={'post_slug': self.slug})
+
+    def save(self, *args, **kwargs):
+        unique_slugify(self, self.title)
+        return super(Publication, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Публикациия'

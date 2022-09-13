@@ -2,7 +2,7 @@ from django import forms
 from .models import *
 
 
-class StartThemeForm(forms.ModelForm):
+class StartQuestionForm(forms.ModelForm):
     def __int__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['theme'].empty_lable = 'Тема'
