@@ -1,0 +1,15 @@
+{% extends 'forum/base.html' %}
+
+{% block content %}
+<h2>Создание вопроса</h2>
+<form action="{% url 'start_question' %}" method="post">
+        {% csrf_token %}
+
+        <div>{{form.non_field_errors}}</div>
+        {% for f in form %}
+        <p><label for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
+        <div>{{ f.errors }}</div>
+        {% endfor %}
+        <button type="submit">Создать</button>
+</form>
+{% endblock content %}
