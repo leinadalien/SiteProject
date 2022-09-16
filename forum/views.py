@@ -3,7 +3,7 @@ from django.contrib.auth.views import LoginView
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import *
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import *
 from .models import *
@@ -41,6 +41,8 @@ class ShowPost(DataMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context.update(self.get_user_context())
         context['title'] = context['post']
+        if self.request.user == context['post'].author:
+            self.template_name = 'forum/my_post.html'
         return context
 
 
@@ -76,7 +78,9 @@ class StartQuestion(LoginRequiredMixin, DataMixin, CreateView):
     def form_valid(self, form):
         new_post = form.save(commit=False)
         new_post.author = self.request.user
+        new_post.save()
         return redirect('main')
+
 
 class RegisterUser(DataMixin, CreateView):
     form_class = RegisterUserForm
@@ -114,5 +118,24 @@ def logout_user(request):
     return redirect('main')
 
 
-def my_questions(request):
-    return HttpResponse("my questions")
+class MyQuestions(DataMixin, ListView):
+    model = Publication
+    template_name = 'forum/my_questions.html'
+    context_object_name = 'posts'
+    allow_empty = False
+    paginate_by = 3
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(self.get_user_context())
+        context['title'] = 'Мои вопросы'
+        return context
+
+    def get_queryset(self):
+        return Publication.objects.filter(author=self.request.user)
+
+
+class DeletePost(DataMixin, DeleteView):
+    model = Publication
+    template_name = 'forum/delete_post.html'
+    success_url = reverse_lazy('my_questions')

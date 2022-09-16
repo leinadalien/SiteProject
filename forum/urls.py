@@ -11,5 +11,6 @@ urlpatterns = [
     path('post/<slug:post_slug>/', ShowPost.as_view(), name='post'),
     path('theme/<slug:theme_slug>/', PublicationByTheme.as_view(), name='theme'),
     path('start-question/', StartQuestion.as_view(), name='start_question'),
-    path('my-questions/', my_questions, name='my_questions')
+    path('my-questions/', MyQuestions.as_view(), name='my_questions'),
+    path('post/<slug:post_slug>/delete/', DeletePost.as_view(), name='delete_post')
 ]
