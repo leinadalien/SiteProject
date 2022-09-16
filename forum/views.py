@@ -1,5 +1,6 @@
-from django.contrib.auth.forms import UserCreationForm
-from django.http import HttpResponse, Http404
+from django.contrib.auth import logout, login
+from django.contrib.auth.views import LoginView
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
@@ -28,10 +29,6 @@ class ForumHome(DataMixin, ListView):
 
 def about(request):
     return render(request, 'forum/about.html', {'title': 'About'})
-
-
-def login(request):
-    return HttpResponse('log in')
 
 
 class ShowPost(DataMixin, DetailView):
@@ -87,6 +84,30 @@ class RegisterUser(DataMixin, CreateView):
         context.update(self.get_user_context())
         context['title'] = 'Регистрация'
         return context
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('main')
+
+
+class LoginUser(DataMixin, LoginView):
+    form_class = AuthenticationForm
+    template_name = 'forum/login.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(self.get_user_context())
+        context['title'] = 'Вход'
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('main')
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('main')
 
 
 def my_questions(request):
