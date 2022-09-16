@@ -4,10 +4,10 @@
 <ul>
     {%for post in posts %}
     <li>
-        <p>Тема: {{post.theme}}</p>
+        <p>Тема: {{ post.theme }}</p><p>Автор: {{ post.author }}</p>
         <h2>{{post.title}}</h2>
-        <p>{{post.content|linebreaks|truncatewords:10}}</p>
-        <p>Дата: {{post.time_update|date:"d-m-y H:i:s"}}</p>
+        <p>{{ post.content|linebreaks|truncatewords:10 }}</p>
+        <p>Дата: {{ post.time_update|date:"d-m-y H:i:s" }}</p>
         <div class="clear"></div>
         <p class="link-open-post"><a href="{{ post.get_absolute_url }}">Открыть</a></p>
 

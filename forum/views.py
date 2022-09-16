@@ -73,6 +73,10 @@ class StartQuestion(LoginRequiredMixin, DataMixin, CreateView):
         context['title'] = 'Создание вопроса'
         return context
 
+    def form_valid(self, form):
+        new_post = form.save(commit=False)
+        new_post.author = self.request.user
+        return redirect('main')
 
 class RegisterUser(DataMixin, CreateView):
     form_class = RegisterUserForm

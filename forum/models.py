@@ -1,6 +1,8 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from forum.unique_slugify import unique_slugify
+
 
 class Publication(models.Model):
     title = models.CharField(max_length=255, verbose_name="Заголовок")
@@ -10,6 +12,8 @@ class Publication(models.Model):
     is_published = models.BooleanField(default=True, verbose_name="Опубликовано")
     theme = models.ForeignKey('Theme', on_delete=models.PROTECT, verbose_name="Тема")
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='автор', null=True)
+
     def __str__(self):
         return self.title
 
@@ -18,6 +22,7 @@ class Publication(models.Model):
 
     def save(self, *args, **kwargs):
         unique_slugify(self, self.title)
+
         return super(Publication, self).save(*args, **kwargs)
 
     class Meta:
@@ -29,6 +34,7 @@ class Publication(models.Model):
 class Theme(models.Model):
     name = models.CharField(max_length=50, db_index=True, verbose_name="Название")
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
+
     def __str__(self):
         return self.name
 

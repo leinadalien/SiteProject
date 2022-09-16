@@ -22,3 +22,6 @@ class ThemeAdmin(admin.ModelAdmin):
 
 admin.site.register(Publication, PublicationAdmin)
 admin.site.register(Theme, ThemeAdmin)
+
+admin.site.site_title = 'Администрирование форума'
+admin.site.site_header = 'Администрирование форума'

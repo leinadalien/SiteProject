@@ -1,0 +1,13 @@
+#header {
+    background: #08bd62;
+}
+
+.module caption, .module h2 {
+    background: #00a83e;
+}
+div.breadcrumbs {
+    background: #05964d;
+}
+.submit-row input[type="submit"] {
+    background: #08bd62;
+}
