@@ -17,12 +17,13 @@
 				</nav>
 			{% endblock main-menu %}
 		</header>
+		<div class="flex-container">
 		<!--content block -->
 		<section class="content">
 			{% block content %}
 			{% endblock content %}
 			{% if page_obj.has_other_pages %}
-			<nav>
+			<nav class="flex-container">
 				{% if page_obj.has_previous %}
 					<a href="?page={{ page_obj.previous_page_number }}">&lt</a>
 				{% endif %}
@@ -57,8 +58,9 @@
 				{% endfor %}
 			</ul>
 		</aside>
-		<!-- end of right sidebar -->
 
+		<!-- end of right sidebar -->
+		</div>
 		<footer>
 			<div>
 				<small>&copy; leinadalien company</small>
