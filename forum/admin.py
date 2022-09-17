@@ -20,8 +20,15 @@ class ThemeAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
 
 
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'post', 'author', 'content', 'time_create')
+    list_display_links = ('id', 'content')
+    search_fields = ('content', 'post', 'author')
+
+
 admin.site.register(Publication, PublicationAdmin)
 admin.site.register(Theme, ThemeAdmin)
+admin.site.register(Comment, CommentAdmin)
 
 admin.site.site_title = 'Администрирование форума'
 admin.site.site_header = 'Администрирование форума'

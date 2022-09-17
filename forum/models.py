@@ -46,3 +46,20 @@ class Theme(models.Model):
         verbose_name = 'Тема'
         verbose_name_plural = 'Темы'
         ordering = ['id']
+
+
+class Comment(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
+    post = models.ForeignKey(Publication, on_delete=models.CASCADE, verbose_name='Пост')
+    content = models.TextField(verbose_name='Комментарий')
+    time_create = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания", null=True)
+    time_update = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
+
+
+    def get_absolute_url(self):
+        return reverse('comment', kwargs={'comment_id': self.pk})
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+        ordering = ['id']

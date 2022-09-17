@@ -13,5 +13,5 @@ urlpatterns = [
     path('start-question/', StartQuestion.as_view(), name='start_question'),
     path('my-questions/', MyQuestions.as_view(), name='my_questions'),
     path('delete-post/<slug:post_slug>/', delete_post, name='delete_post'),
-    path('close-post/<slug:post_slug>/', close_post, name='close_post')
+    path('close-post/<slug:post_slug>/', close_post, name='close_post'),
 ]

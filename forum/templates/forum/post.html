@@ -1,19 +1,41 @@
 {% extends 'forum/base.html' %}
 
 {% block content %}
-<p>Тема: {{ post.theme }}</p><p>Автор: {{ post.author }}</p>
 <h2>{{post.title}}</h2>
 <p>{{post.content|linebreaks}}</p>
 <p>Тема: {{ post.theme }}</p>
+{% if not user == post.author %}
 <p>Автор: {{ post.author }}</p>
-<p>Дата: {{post.time_update|date:"d-m-y H:i:s"}}</p>
+{% endif %}
+<p>Дата: {{ post.time_create|date:"d-m-y H:i:s" }}</p>
 <section>
     <p>Ответы</p>
+    {% for comment in post.comment_set.all %}
+    <p>{{ comment.author }}</p>
+    <p>{{ comment.content|linebreaks }}</p>
+    <p>{{ comment.time_create|date:"d-m-y H:i:s" }}</p>
+    {% endfor %}
 </section>
 <hr>
 {% if post.closed %}
-<p>Вопрос закрыт</p>
+    <p>Вопрос закрыт</p>
+{% endif %}
+{% if user == post.author %}
+    {% if not post.closed %}
+        <p><a href="{% url 'close_post' post.slug %}">Закрыть</a></p>
+    {% endif %}
+    <p><a href="{% url 'delete_post' post.slug %}">Удалить</a></p>
 {% else %}
-<p><a href="#">Ответить</a></p>
+    {% if not post.closed %}
+    <form method="post">
+        {% csrf_token %}
+        <div>{{form.non_field_errors}}</div>
+        {% for f in form %}
+            <p><label for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
+            <div>{{ f.errors }}</div>
+        {% endfor %}
+        <button type="submit">Ответить</button>
+    </form>
+    {% endif %}
 {% endif %}
 {% endblock content %}

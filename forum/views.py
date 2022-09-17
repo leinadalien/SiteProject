@@ -5,6 +5,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import *
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import FormMixin
+
 from .forms import *
 from .models import *
 from .utils import *
@@ -31,19 +33,38 @@ def about(request):
     return render(request, 'forum/about.html', {'title': 'About'})
 
 
-class ShowPost(DataMixin, DetailView):
+class ShowPost(FormMixin, DataMixin, DetailView):
     model = Publication
     template_name = 'forum/post.html'
     slug_url_kwarg = 'post_slug'
     context_object_name = 'post'
+    form_class = AddCommentForm
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(self.get_user_context())
         context['title'] = context['post']
-        if self.request.user == context['post'].author:
-            self.template_name = 'forum/my_post.html'
+            #context['form'] = AddCommentForm(initial={'post': self.object})
         return context
+
+    def get_success_url(self):
+        return reverse_lazy('post', kwargs={'post_slug': self.object.slug})
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        post = self.get_object()
+        new_comment = form.save(commit=False)
+        new_comment.post = post
+        new_comment.author = self.request.user
+        new_comment.save()
+        return super(ShowPost, self).form_valid(form)
 
 
 class PublicationByTheme(DataMixin, ListView):
@@ -150,4 +171,6 @@ def close_post(request, post_slug):
         post.closed = True
         post.save()
         return redirect('post', post_slug)
-    return redirect('main')
+    else:
+        raise Http404
+

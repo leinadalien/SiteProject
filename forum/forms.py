@@ -19,6 +19,15 @@ class StartQuestionForm(forms.ModelForm):
         }
 
 
+class AddCommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'cols': 60, 'rows': 5})
+        }
+
+
 class RegisterUserForm(UserCreationForm):
     username = forms.CharField(label='Имя пользователя', widget=forms.TextInput())
     password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput())
