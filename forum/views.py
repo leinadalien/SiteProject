@@ -1,5 +1,6 @@
 from django.contrib.auth import logout, login
 from django.contrib.auth.views import LoginView
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import *
@@ -78,7 +79,7 @@ class StartQuestion(LoginRequiredMixin, DataMixin, CreateView):
         new_post = form.save(commit=False)
         new_post.author = self.request.user
         new_post.save()
-        return redirect('main')
+        return redirect('post', new_post.slug)
 
 
 class RegisterUser(DataMixin, CreateView):
@@ -138,7 +139,9 @@ def delete_post(request, post_slug):
     post = get_object_or_404(Publication, slug=post_slug)
     if request.user == post.author:
         post.delete()
-    return redirect('main')
+        return redirect('my_questions')
+    else:
+        raise Http404
 
 
 def close_post(request, post_slug):
