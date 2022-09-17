@@ -1,6 +1,5 @@
 from django.contrib.auth import logout, login
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import *
@@ -135,7 +134,17 @@ class MyQuestions(DataMixin, ListView):
         return Publication.objects.filter(author=self.request.user)
 
 
-class DeletePost(DataMixin, DeleteView):
-    model = Publication
-    template_name = 'forum/delete_post.html'
-    success_url = reverse_lazy('my_questions')
+def delete_post(request, post_slug):
+    post = get_object_or_404(Publication, slug=post_slug)
+    if request.user == post.author:
+        post.delete()
+    return redirect('main')
+
+
+def close_post(request, post_slug):
+    post = get_object_or_404(Publication, slug=post_slug)
+    if request.user == post.author:
+        post.closed = True
+        post.save()
+        return redirect('post', post_slug)
+    return redirect('main')

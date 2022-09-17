@@ -4,12 +4,14 @@
 <ul>
     {%for post in posts %}
     <li>
-        <p>Тема: {{ post.theme }}</p>
         <h2>{{post.title}}</h2>
         <p>{{ post.content|linebreaks|truncatewords:10 }}</p>
+        <p>Тема: {{ post.theme }}</p>
         <p>Дата: {{ post.time_update|date:"d-m-y H:i:s" }}</p>
-        <p><a href="{{ post.get_absolute_url }}">Открыть</a></p>
-        <p><a href="{{ post.get_absolute_url }}">Закрыть</a></p>
+        <p><a href="{{ post.get_absolute_url }}">Посмотреть</a></p>
+        {% if not post.closed %}
+            <p><a href="{{ post.get_absolute_url }}">Закрыть</a></p>
+        {% endif %}
         <p><a href="{% url 'delete_post' post.slug %}">Удалить</a></p>
         <hr>
     </li>

@@ -12,7 +12,8 @@ class Publication(models.Model):
     is_published = models.BooleanField(default=True, verbose_name="Опубликовано")
     theme = models.ForeignKey('Theme', on_delete=models.PROTECT, verbose_name="Тема")
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
-    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='автор', null=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор', null=True)
+    closed = models.BooleanField(default=False, verbose_name='Закрыт')
 
     def __str__(self):
         return self.title

@@ -1,14 +1,19 @@
 {% extends 'forum/base.html' %}
 
 {% block content %}
-<p>Тема: {{ post.theme }}</p>
 <h2>{{post.title}}</h2>
 <p>{{post.content|linebreaks}}</p>
+<p>Тема: {{ post.theme }}</p>
 <p>Дата: {{post.time_update|date:"d-m-y H:i:s"}}</p>
 <section>
     <p>Ответы</p>
 </section>
 <hr>
-<p><a href="{{ post.get_absolute_url }}">Закрыть</a></p>
-<p><a href="{{ post.get_absolute_url }}">Удалить</a></p>
+{% if post.closed %}
+<p>Вопрос закрыт</p>
+{% endif %}
+{% if not post.closed %}
+<p><a href="{% url 'close_post' post.slug %}">Закрыть</a></p>
+{% endif %}
+<p><a href="{% url 'delete_post' post.slug %}">Удалить</a></p>
 {% endblock content %}
