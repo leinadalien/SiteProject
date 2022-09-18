@@ -16,7 +16,7 @@ class ForumHome(DataMixin, ListView):
     model = Publication
     template_name = 'forum/index.html'
     context_object_name = 'posts'
-    paginate_by = 3
+    paginate_by = 4
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -30,7 +30,16 @@ class ForumHome(DataMixin, ListView):
 
 
 def about(request):
-    return render(request, 'forum/about.html', {'title': 'About'})
+
+    context = {
+        'title': 'О сайте',
+        'themes': Theme.objects.all()
+    }
+    if request.user.is_authenticated:
+        context['menu'] = usual_menu
+    else:
+        context['menu'] = not_auth_menu
+    return render(request, 'forum/about.html', context=context )
 
 
 class ShowPost(FormMixin, DataMixin, DetailView):

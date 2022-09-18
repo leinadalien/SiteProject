@@ -7,9 +7,10 @@
 		<meta charset=utf-8">
 	</head>
 	<body>
+		<div id="page-wraper">
 		<header>
 			{% block main-menu %}
-				<nav>
+				<nav class="nav-main">
 					<a href="{% url 'main' %}">Forum</a>
 					{% for m in menu %}
 					<a href="{% url m.url_name %}">{{m.title}}</a>
@@ -23,26 +24,26 @@
 			{% block content %}
 			{% endblock content %}
 			{% if page_obj.has_other_pages %}
-			<nav class="flex-container">
+			<nav class="centered">
 				{% if page_obj.has_previous %}
-					<a href="?page={{ page_obj.previous_page_number }}">&lt</a>
+					<a class="nav-item" href="?page={{ page_obj.previous_page_number }}">&lt</a>
 				{% endif %}
 				{% for p in paginator.page_range %}
 					{% if page_obj.number == p %}
-						<p>{{ p }}</p>
+						<p class="nav-item selected">{{ p }}</p>
 					{% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
-						<a href="?page={{ p }}">{{ p }}</a>
+						<a class="nav-item" href="?page={{ p }}">{{ p }}</a>
 					{% endif %}
 				{% endfor %}
 				{% if page_obj.has_next %}
-					<a href="?page={{ page_obj.next_page_number }}">&gt</a>
+					<a class="nav-item" href="?page={{ page_obj.next_page_number }}">&gt</a>
 				{% endif %}
 			</nav>
 			{% endif %}
 		</section>
 		<!-- end of content block-->
 		<!-- right sidebar -->
-		<aside>
+		<aside id="right-sidebar">
 			{% if theme_selected == 0 %}
 			<p>Все темы</p>
 			{% else %}
@@ -66,6 +67,8 @@
 				<small>&copy; leinadalien company</small>
 			</div>
 		</footer>
+
+		</div>
 	<!-- Конец footer'а и страницы -->
 	</body>
 </html>

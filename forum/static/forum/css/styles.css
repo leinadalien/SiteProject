@@ -1,20 +1,119 @@
-* {
-    margin: 0;
+
+/*сброс стилей*/
+/* Указываем box sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
+
+/* Убираем внутренние отступы */
+ul[class],
+ol[class] {
+  padding: 0;
+}
+
+/* Убираем внешние отступы */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+ul[class],
+ol[class],
+li,
+figure,
+figcaption,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+/* Удаляем стандартную стилизацию для всех ul и il, у которых есть атрибут class*/
+ul[class],
+ol[class] {
+  list-style: none;
+}
+
 
 html, body {
     height: 100%;
 }
-
 header {
-    background: #08bd62;
-    padding: 20px;
+    background: #05753d;
 }
 
 .flex-container {
+    background: #05753d;
     display: flex;
+    flex-direction: row;
+    flex: 1 0 auto;
+}
+#right-sidebar {
+    display: flex;
+    width: 200px;
+    flex-grow: 0;
+    background: #05964d;
+    border-radius: 10px 0px 0px 10px ;
+    padding: 10px;
+    flex-direction: column;
+    align-items: center;
+}
+#page-wraper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+footer {
+    flex: 0 0 auto;
+}
+.content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+    background: #05753d
 }
 
-footer {
+.post-item {
+    background: #baffdd;
+    margin: 10px;
+    border-radius: 10px;
+    padding: 10px;
+    max-height: 300px;
+}
 
+.centered {
+    display: flex;
+    align-items: center;
+}
+
+.post-container {
+display: block;
+}
+nav {
+    justify-content: center;
+    background: #baffdd;
+    margin: 0px 10px 10px 10px;
+    border-radius: 10px;
+    padding: 5px;
+}
+nav, footer {
+    background: #08bd62;
+
+}
+footer {
+    padding: 10px;
+}
+.nav-main {
+    margin: 0px;
+    padding: 15px;
+    border-radius: 0px 0px 0px 10px;
+    border-radius:
+}
+.post-text-owner {
+    display: flex;
+    width: 500px;
+    flex: 1 1 auto;
 }

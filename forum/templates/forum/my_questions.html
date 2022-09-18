@@ -1,9 +1,9 @@
 {% extends 'forum/base.html' %}
 
 {% block content %}
-<ul>
+<ul class="centered post-container">
     {%for post in posts %}
-    <li>
+    <li class="post-item">
         <h2>{{post.title}}</h2>
         <p>{{ post.content|linebreaks|truncatewords:10 }}</p>
         <p>Тема: {{ post.theme }}</p>
