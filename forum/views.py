@@ -6,17 +6,19 @@ from django.urls import reverse_lazy
 from django.views.generic import *
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormMixin
-
+import logging
 from .forms import *
 from .models import *
 from .utils import *
+
+logger = logging.getLogger('main')
 
 
 class ForumHome(DataMixin, ListView):
     model = Publication
     template_name = 'forum/index.html'
     context_object_name = 'posts'
-    paginate_by = 4
+    paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -31,7 +33,6 @@ class ForumHome(DataMixin, ListView):
 
 
 def about(request):
-
     context = {
         'title': 'О сайте',
         'themes': Theme.objects.all(),
@@ -41,7 +42,7 @@ def about(request):
         context['menu'] = usual_menu
     else:
         context['menu'] = not_auth_menu
-    return render(request, 'forum/about.html', context=context )
+    return render(request, 'forum/about.html', context=context)
 
 
 class ShowPost(FormMixin, DataMixin, DetailView):
@@ -69,6 +70,7 @@ class ShowPost(FormMixin, DataMixin, DetailView):
             return self.form_invalid(form)
 
     def form_valid(self, form):
+        logger.info('Добавление комментария')
         post = self.get_object()
         new_comment = form.save(commit=False)
         new_comment.post = post
@@ -82,7 +84,7 @@ class PublicationByTheme(DataMixin, ListView):
     template_name = 'forum/index.html'
     context_object_name = 'posts'
     allow_empty = False
-    paginate_by = 3
+    paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -108,6 +110,7 @@ class StartQuestion(LoginRequiredMixin, DataMixin, CreateView):
         return context
 
     def form_valid(self, form):
+        logger.info('Создание вопроса')
         new_post = form.save(commit=False)
         new_post.author = self.request.user
         new_post.save()
@@ -148,6 +151,7 @@ class LoginUser(DataMixin, LoginView):
 
 
 def logout_user(request):
+    logger.info('Выход из системы')
     logout(request)
     return redirect('main')
 
@@ -157,7 +161,7 @@ class MyQuestions(DataMixin, ListView):
     template_name = 'forum/my_questions.html'
     context_object_name = 'posts'
     allow_empty = True
-    paginate_by = 3
+    paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -173,6 +177,7 @@ class MyQuestions(DataMixin, ListView):
 def delete_post(request, post_slug):
     post = get_object_or_404(Publication, slug=post_slug)
     if request.user == post.author:
+        logger.info('удаление поста')
         post.delete()
         return redirect('my_questions')
     else:
@@ -182,9 +187,9 @@ def delete_post(request, post_slug):
 def close_post(request, post_slug):
     post = get_object_or_404(Publication, slug=post_slug)
     if request.user == post.author:
+        logger.info('закрытие поста')
         post.closed = True
         post.save()
         return redirect('post', post_slug)
     else:
         raise Http404
-
