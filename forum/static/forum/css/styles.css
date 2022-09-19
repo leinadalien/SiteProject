@@ -41,8 +41,17 @@ ol[class] {
 html, body {
     height: 100%;
 }
-header {
+header, footer {
     background: #05753d;
+}
+
+a {
+    color: #004721;
+    font-weight: 600;
+    text-decoration: none;
+}
+a:hover {
+    color: #baffdd;
 }
 
 .flex-container {
@@ -51,69 +60,192 @@ header {
     flex-direction: row;
     flex: 1 0 auto;
 }
-#right-sidebar {
-    display: flex;
-    width: 200px;
-    flex-grow: 0;
-    background: #05964d;
-    border-radius: 10px 0px 0px 10px ;
-    padding: 10px;
-    flex-direction: column;
-    align-items: center;
-}
 #page-wraper {
     display: flex;
     flex-direction: column;
     height: 100%;
 }
-footer {
-    flex: 0 0 auto;
-}
-.content {
-    display: flex;
-    flex-direction: column;
-    flex: 1 0 auto;
-    background: #05753d
-}
 
-.post-item {
-    background: #baffdd;
-    margin: 10px;
-    border-radius: 10px;
-    padding: 10px;
-    max-height: 300px;
-}
 
 .centered {
     display: flex;
     align-items: center;
 }
 
-.post-container {
-display: block;
-}
+
 nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #05964d;
+    border-radius: 10px;
+}
+
+#footer-inner {
+    background: #08bd62;
+    padding: 10px;
+    margin: 0px 10px 0px 10px;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.nav-main {
+    background: #08bd62;
+    justify-content: space-between;
+    display: flex;
+    flex.direction: row;
+    border-radius: 0px 0px 10px 10px;
+    margin: 0px 10px 10px 10px;
+    padding:0px;
+}
+.main-menu-item {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
     justify-content: center;
+    height: 100%;
+    padding: 20px;
+}
+
+.main-menu-item-selected {
+    background: #05964d;
+    border-radius: 0px 0px 10px 10px;
+    color: #baffdd;
+}
+.content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    background: #05753d;
+}
+.post-container {
+    display: block;
+}
+.post-item {
+    display: flex;
+    flex-direction: column;
     background: #baffdd;
     margin: 0px 10px 10px 10px;
     border-radius: 10px;
-    padding: 5px;
+    flex-shrink: 1;
 }
-nav, footer {
-    background: #08bd62;
 
-}
-footer {
+.post-title {
+    background: #08bd62;
+    color: #baffdd;
+    border-radius: 10px 10px 0px 0px;
     padding: 10px;
-}
-.nav-main {
-    margin: 0px;
-    padding: 15px;
-    border-radius: 0px 0px 0px 10px;
-    border-radius:
 }
 .post-text-owner {
     display: flex;
-    width: 500px;
-    flex: 1 1 auto;
+    flex-shrink: 1;
+    padding: 10px;
+
 }
+.post-bottom-data {
+    background: #7bb89a;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-shrink: 1;
+    border-radius: 0px 0px 10px 10px;
+}
+.post-meta-data {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
+    flex-shrink: 1;
+    padding: 10px;
+}
+
+.open-post-button {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    background: #05964d;
+    padding: 10px;
+    border-radius: 10px 0px 10px 0px;
+}
+.open-post-button:hover {
+    background: #08bd62;
+    color: #baffdd;
+}
+.paginator {
+    margin: 0px 10px 10px 10px;
+}
+
+.page-nums {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+
+
+.page-pointer {
+    display: flex;
+    border-radius: 50%;
+    background: #004721;
+}
+
+.page-num {
+    min-width: 25px;
+    width: auto;
+    height: 25px;
+    margin: 5px;
+    justify-content: center;
+    align-items: center;
+    color: #08bd62;
+}
+.page-num-hidden {
+    width: 25px;
+    height: 25px;
+    background: #05964d;
+}
+a .page-num:hover {
+    background: #08bd62;
+    color: #baffdd;
+}
+.page-num-selected {
+    background: #baffdd;
+    color: #004721;
+}
+
+
+
+
+#right-sidebar {
+    width: 200px;
+    flex-grow: 0;
+    background: #05964d;
+    border-radius: 10px;
+    margin: 0px 10px 10px 0px;
+}
+.theme-list{
+    display:flex;
+    flex-direction: column;
+}
+.theme-item {
+    display:block;
+    flex-grow: 1;
+    padding:10px;
+
+}
+.first-theme-item {
+    border-radius: 10px 10px 0px 0px;
+}
+.theme-item-selected {
+    background: #08bd62;
+    font-weight: 600;
+    color: #baffdd;
+}
+footer {
+    flex: 0 0 auto;
+}
+#footer-inner {
+    border-radius: 10px 10px 0px 0px;
+    margin: 0px, 10px, 0px, 10px;
+}
+

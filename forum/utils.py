@@ -2,11 +2,13 @@ from forum.models import *
 
 
 not_auth_menu = [
+    {'title': 'Главная', 'url_name': 'main'},
     {'title': 'О сайте', 'url_name': 'about'},
     {'title': 'Войти', 'url_name': 'login'},
     {'title': 'Регистрация', 'url_name': 'register'}
 ]
 usual_menu = [
+    {'title': 'Главная', 'url_name': 'main'},
     {'title': 'О сайте', 'url_name': 'about'},
     {'title': 'Создать вопрос', 'url_name': 'start_question'},
     {'title': 'Мои вопросы', 'url_name': 'my_questions'},

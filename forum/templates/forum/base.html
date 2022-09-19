@@ -11,9 +11,16 @@
 		<header>
 			{% block main-menu %}
 				<nav class="nav-main">
-					<a href="{% url 'main' %}">Forum</a>
 					{% for m in menu %}
-					<a href="{% url m.url_name %}">{{m.title}}</a>
+					{% if m.url_name == menu_item_selected %}
+					<a href="{% url m.url_name %}">
+					<div class="main-menu-item main-menu-item-selected"><p>{{m.title}}</p></div>
+					</a>
+					{% else %}
+					<a href="{% url m.url_name %}">
+					<div class="main-menu-item"><p>{{m.title}}</p></div>
+					</a>
+					{% endif %}
 					{% endfor %}
 				</nav>
 			{% endblock main-menu %}
@@ -24,19 +31,35 @@
 			{% block content %}
 			{% endblock content %}
 			{% if page_obj.has_other_pages %}
-			<nav class="centered">
+			<nav class="centered paginator">
 				{% if page_obj.has_previous %}
-					<a class="nav-item" href="?page={{ page_obj.previous_page_number }}">&lt</a>
+					<a href="?page={{ page_obj.previous_page_number }}">
+						<div class="page-pointer page-num" ><p>&lt</p></div>
+					</a>
+				{% else %}
+					<div class="page-pointer page-num page-num-hidden"></div>
 				{% endif %}
+				<div class="page-nums">
 				{% for p in paginator.page_range %}
 					{% if page_obj.number == p %}
-						<p class="nav-item selected">{{ p }}</p>
+						<div class="page-pointer page-num page-num-selected">
+							<p>{{ p }}</p>
+						</div>
 					{% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
-						<a class="nav-item" href="?page={{ p }}">{{ p }}</a>
+						<a href="?page={{ p }}">
+							<div class="page-pointer page-num">
+								<p>{{ p }}</p>
+							</div>
+						</a>
 					{% endif %}
 				{% endfor %}
+				</div>
 				{% if page_obj.has_next %}
-					<a class="nav-item" href="?page={{ page_obj.next_page_number }}">&gt</a>
+					<a href="?page={{ page_obj.next_page_number }}">
+						<div class="page-pointer page-num"  ><p>&gt</p></div>
+					</a>
+				{% else %}
+					<div class="page-pointer page-num page-num-hidden"></div>
 				{% endif %}
 			</nav>
 			{% endif %}
@@ -44,17 +67,37 @@
 		<!-- end of content block-->
 		<!-- right sidebar -->
 		<aside id="right-sidebar">
-			{% if theme_selected == 0 %}
-			<p>Все темы</p>
-			{% else %}
-			<p><a href="{% url 'main' %}">Все темы</a></p>
+			<ul class="theme-list">
+				{% if theme_selected == 0 %}
+				<li class="theme-item first-theme-item theme-item-selected">
+					<div>
+						<p>Все темы</p>
+					</div>
+				</li>
+				{% else %}
+				<li class="theme-item">
+					<a href="{% url 'main' %}">
+						<div>
+							<p>Все темы</p>
+						</div>
+					</a>
+				</li>
 			{% endif %}
-			<ul>
 				{% for theme in themes %}
 					{% if theme.pk == theme_selected %}
-						<li>{{theme.name}}</li>
+						<li class="theme-item theme-item-selected">
+							<div>
+								<p>{{theme.name}}</p>
+							</div>
+						</li>
 					{% else %}
-						<li><a href="{{ theme.get_absolute_url }}">{{theme.name}}</a></li>
+						<li class="theme-item">
+							<a href="{{ theme.get_absolute_url }}">
+								<div>
+									<p>{{theme.name}}</p>
+								</div>
+							</a>
+						</li>
 					{% endif %}
 				{% endfor %}
 			</ul>
@@ -63,7 +106,7 @@
 		<!-- end of right sidebar -->
 		</div>
 		<footer>
-			<div>
+			<div id="footer-inner">
 				<small>&copy; leinadalien company</small>
 			</div>
 		</footer>

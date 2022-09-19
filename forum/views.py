@@ -23,6 +23,7 @@ class ForumHome(DataMixin, ListView):
         context.update(self.get_user_context())
         context['theme_selected'] = 0
         context['title'] = 'Главная'
+        context['menu_item_selected'] = 'main'
         return context
 
     def get_queryset(self):
@@ -33,7 +34,8 @@ def about(request):
 
     context = {
         'title': 'О сайте',
-        'themes': Theme.objects.all()
+        'themes': Theme.objects.all(),
+        'menu_item_selected': 'about'
     }
     if request.user.is_authenticated:
         context['menu'] = usual_menu
@@ -53,7 +55,6 @@ class ShowPost(FormMixin, DataMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context.update(self.get_user_context())
         context['title'] = context['post']
-            #context['form'] = AddCommentForm(initial={'post': self.object})
         return context
 
     def get_success_url(self):
@@ -103,6 +104,7 @@ class StartQuestion(LoginRequiredMixin, DataMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context.update(self.get_user_context())
         context['title'] = 'Создание вопроса'
+        context['menu_item_selected'] = 'start_question'
         return context
 
     def form_valid(self, form):
@@ -121,6 +123,7 @@ class RegisterUser(DataMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context.update(self.get_user_context())
         context['title'] = 'Регистрация'
+        context['menu_item_selected'] = 'register'
         return context
 
     def form_valid(self, form):
@@ -137,6 +140,7 @@ class LoginUser(DataMixin, LoginView):
         context = super().get_context_data(**kwargs)
         context.update(self.get_user_context())
         context['title'] = 'Вход'
+        context['menu_item_selected'] = 'login'
         return context
 
     def get_success_url(self):
@@ -159,6 +163,7 @@ class MyQuestions(DataMixin, ListView):
         context = super().get_context_data(**kwargs)
         context.update(self.get_user_context())
         context['title'] = 'Мои вопросы'
+        context['menu_item_selected'] = 'my_questions'
         return context
 
     def get_queryset(self):
