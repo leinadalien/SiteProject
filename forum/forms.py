@@ -24,9 +24,13 @@ class AddCommentForm(forms.ModelForm):
         model = Comment
         fields = ['content']
         widgets = {
-            'content': forms.Textarea(attrs={'cols': 60, 'rows': 5})
+            'content': forms.Textarea(attrs={'class': 'answer-textarea', 'placeholder': 'Напишите ответ'})
         }
-
+        error_messages = {
+            'content': {
+                'required': ("Ответ не может быть пустым")
+            }
+        }
 
 class RegisterUserForm(UserCreationForm):
     username = forms.CharField(label='Имя пользователя', widget=forms.TextInput())

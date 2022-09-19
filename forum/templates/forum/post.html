@@ -1,41 +1,67 @@
 {% extends 'forum/base.html' %}
 
 {% block content %}
-<h2>{{post.title}}</h2>
-<p>{{post.content|linebreaks}}</p>
-<p>Тема: {{ post.theme }}</p>
-{% if not user == post.author %}
-<p>Автор: {{ post.author }}</p>
-{% endif %}
-<p>Дата: {{ post.time_create|date:"d-m-y H:i:s" }}</p>
-<section>
-    <p>Ответы</p>
-    {% for comment in post.comment_set.all %}
-    <p>{{ comment.author }}</p>
-    <p>{{ comment.content|linebreaks }}</p>
-    <p>{{ comment.time_create|date:"d-m-y H:i:s" }}</p>
-    {% endfor %}
-</section>
-<hr>
-{% if post.closed %}
-    <p>Вопрос закрыт</p>
-{% endif %}
-{% if user == post.author %}
-    {% if not post.closed %}
-        <p><a href="{% url 'close_post' post.slug %}">Закрыть</a></p>
+<div class="post-item">
+    <div class="post-title"><h2>{{post.title}}</h2></div>
+    <div class="post-text-owner" ><p>{{post.content|linebreaks}}</p></div>
+    <div class="post-meta-data"><p>Тема: {{ post.theme }}</p>
+    {% if not user == post.author %}
+        <p>Автор: {{ post.author }}</p>
     {% endif %}
-    <p><a href="{% url 'delete_post' post.slug %}">Удалить</a></p>
+    <p>Дата: {{ post.time_create|date:"d-m-y H:i:s" }}</p>
+    </div>
+</div>
+{% if not post.comment_set.exists %}
+    <div class="answers-title">
+        <p>Ответов нет</p>
+    </div>
 {% else %}
-    {% if not post.closed %}
-    <form method="post">
-        {% csrf_token %}
-        <div>{{form.non_field_errors}}</div>
-        {% for f in form %}
-            <p><label for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
-            <div>{{ f.errors }}</div>
+    <div class="answers-title">
+        <p>Ответы</p>
+
+    </div>
+    <section class="answers-container">
+        {% for comment in post.comment_set.all %}
+            <div class="answer">
+                <div class="answer-author"><p>{{ comment.author }}</p></div>
+                <div class="answer-content"><p>{{ comment.content|linebreaks }}</p></div>
+                <small class="answer-data">{{ comment.time_create|date:"d-m-y H:i:s" }}</small>
+            </div>
+            {% if not forloop.last %}
+                <div class="answer-separator"></div>
+            {% endif %}
         {% endfor %}
-        <button type="submit">Ответить</button>
-    </form>
+    </section>
+{% endif %}
+{% if post.closed %}
+           <div class="closed-post-message"><p>Вопрос закрыт</p></div>
+{% endif %}
+
+{% if user == post.author %}
+<div class="post-manage-buttons">
+    {% if not post.closed %}
+    <a href="{% url 'close_post' post.slug %}"><div class="post-button close-post-button first-manage-button"><p>Закрыть</p></div></a>
+    <a href="{% url 'delete_post' post.slug %}"><div class="post-button delete-post-button last-manage-button"><P>Удалить</p></div></a>
+    {% else %}
+    <a href="{% url 'delete_post' post.slug %}"><div class="post-button delete-post-button first-manage-button last-manage-button"><p>Удалить</p></div></a>
+    {% endif %}
+</div>
+{% else %}
+    {% if not post.closed and request.user.is_authenticated %}
+    <div class="container-form">
+        <div class="container-form-title"><p>Оставить ответ</p></div>
+        <form method="post">
+            {% csrf_token %}
+            <div>{{form.non_field_errors}}</div>
+            {% for f in form %}
+                <div class="answer-form-item">{{ f }}</div>
+            {% if f.errors %}
+                <div class="answer-form-item-error">{{ f.errors }}</div>
+            {% endif %}
+            {% endfor %}
+            <div ><button class="add-answer-button" type="submit">Ответить</button></div>
+        </form>
+    </div>
     {% endif %}
 {% endif %}
 {% endblock content %}
