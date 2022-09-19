@@ -249,7 +249,7 @@ nav {
 .container-form {
     display: flex;
     flex-direction: column;
-    margin:10px;
+    margin: 0px 10px 10px 10px;
     border-radius: 10px;
     background: #baffdd;
 }
@@ -260,21 +260,39 @@ nav {
     border-radius: 10px 10px 0px 0px;
     padding: 10px;
 }
-.answer-textarea {
+select {
+    background: #08bd62;
+    outline-color: #baffdd;
+    border-color: #baffdd;
+}
+textarea, input, select {
     width: 100%;
     resize: none;
     border-radius: 10px;
     padding: 10px;
     font-size: 16px;
 }
-.answer-textarea:focus {
+textarea:focus, input:focus, select:focus {
     outline: none;
     border: 2px solid #08bd62;
 }
-.answer-form-item {
+select:focus {
+    outline-color: #004721;
+    border-color: #004721;
+}
+
+.form-item {
+    display: flex;
+    flex-direction: column;
     margin: 10px;
 }
-.answer-form-item-error {
+
+.form-item-label {
+    color: #004721;
+    align-self: center;
+}
+
+.form-item-error {
     display: flex;
     background: #f33;
     color: #850808;
@@ -283,7 +301,10 @@ nav {
     padding: 10px;
     margin: 0px 10px 10px 10px;
 }
-.add-answer-button {
+.server-error {
+    margin: 10px;
+}
+.submit-button {
     border: none;
     display: flex;
     height: 100%;
@@ -298,9 +319,14 @@ nav {
     font-weight: 600;
     text-decoration: none;
 }
-.add-answer-button:hover {
+.submit-button:hover {
     background: #08bd62;
     color: #baffdd;
+}
+
+.form-auth {
+    max-width: 600px;
+    align-self: center;
 }
 
 .paginator {

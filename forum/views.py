@@ -156,7 +156,7 @@ class MyQuestions(DataMixin, ListView):
     model = Publication
     template_name = 'forum/my_questions.html'
     context_object_name = 'posts'
-    allow_empty = False
+    allow_empty = True
     paginate_by = 3
 
     def get_context_data(self, *, object_list=None, **kwargs):

@@ -2,7 +2,8 @@
 
 {% block content %}
 <ul class="centered post-container">
-    {%for post in posts %}
+    {% if posts %}
+    {% for post in posts %}
     <li class="post-item">
         <div class="post-title"><h3>{{post.title}}</h3></div>
 
@@ -17,8 +18,10 @@
             </div>
             <a href="{{ post.get_absolute_url }}"><div class="post-button open-post-button" ><p>Посмотреть</p></div></a>
         </div>
-
     </li>
     {% endfor %}
+    {% else %}
+    <div class="answers-title"><p>Здесь пока ничего нет</p></div>
+    {% endif %}
 </ul>
 {% endblock content %}

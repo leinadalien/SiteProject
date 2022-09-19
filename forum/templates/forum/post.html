@@ -54,12 +54,12 @@
             {% csrf_token %}
             <div>{{form.non_field_errors}}</div>
             {% for f in form %}
-                <div class="answer-form-item">{{ f }}</div>
+                <div class="form-item">{{ f }}</div>
             {% if f.errors %}
-                <div class="answer-form-item-error">{{ f.errors }}</div>
+                <div class="form-item-error">{{ f.errors }}</div>
             {% endif %}
             {% endfor %}
-            <div ><button class="add-answer-button" type="submit">Ответить</button></div>
+            <div ><button class="submit-button" type="submit">Ответить</button></div>
         </form>
     </div>
     {% endif %}

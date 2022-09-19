@@ -14,8 +14,19 @@ class StartQuestionForm(forms.ModelForm):
         model = Publication
         fields = ['theme', 'title', 'content']
         widgets = {
-            'title': forms.TextInput(),
-            'content': forms.Textarea(attrs={'cols': 60, 'rows': 10})
+            'title': forms.TextInput(attrs={'placeholder': 'Кратко изложите суть вопроса'}),
+            'content': forms.Textarea(attrs={'placeholder': 'Опишите подробно ваш вопрос'})
+        }
+        error_messages = {
+            'theme': {
+                'required': ("Тема не выбрана")
+            },
+            'title': {
+                'required': ("Заголовок не может быть пустым")
+            },
+            'content': {
+                'required': ("Вопрос не может быть пустым")
+            }
         }
 
 
@@ -24,7 +35,7 @@ class AddCommentForm(forms.ModelForm):
         model = Comment
         fields = ['content']
         widgets = {
-            'content': forms.Textarea(attrs={'class': 'answer-textarea', 'placeholder': 'Напишите ответ'})
+            'content': forms.Textarea(attrs={'placeholder': 'Напишите ответ'})
         }
         error_messages = {
             'content': {

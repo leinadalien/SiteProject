@@ -10,10 +10,12 @@
 
         <div>{{form.non_field_errors}}</div>
         {% for f in form %}
-        <p><label for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
-        <div>{{ f.errors }}</div>
+        <div class="form-item">{{ f }}</div>
+        {% if f.errors %}
+                <div class="form-item-error">{{ f.errors }}</div>
+        {% endif %}
         {% endfor %}
-        <button type="submit">Создать</button>
+        <div ><button class="submit-button" type="submit">Создать</button></div>
 </form>
 </div>
 {% endblock content %}

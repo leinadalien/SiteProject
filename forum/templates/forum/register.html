@@ -1,14 +1,22 @@
 {% extends 'forum/base.html' %}
 
 {% block content %}
-<h1>{{title}}</h1>
-<form method="post">
-    {% csrf_token %}
-    <div>{{form.non_field_errors}}</div>
-    {% for f in form %}
-        <p><label for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
-        <div>{{ f.errors }}</div>
-    {% endfor %}
-    <button type="submit">Регистрация</button>
-</form>
+<div class="container-form form-auth">
+    <div class="container-form-title">
+        <h2>{{title}}</h2>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="form-item-error server-error">{{form.non_field_errors}}</div>
+        {% endif %}
+        {% for f in form %}
+            <div class="form-item"><label class="form-item-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</div>
+            {% if f.errors %}
+                <div class="form-item-error">{{ f.errors }}</div>
+            {% endif %}
+        {% endfor %}
+        <div ><button class="submit-button" type="submit">Зарегистрироваться</button></div>
+    </form>
+</div>>
 {% endblock content %}
