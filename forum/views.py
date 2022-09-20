@@ -6,7 +6,9 @@ from django.urls import reverse_lazy
 from django.views.generic import *
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormMixin
+from forum.async_requests import *
 import logging
+import asyncio
 from .forms import *
 from .models import *
 from .utils import *
@@ -30,7 +32,8 @@ class ForumHome(DataMixin, ListView):
         return context
 
     def get_queryset(self):
-        return Publication.objects.filter(is_published=True)
+        returned_posts = get_all_publications()
+        return asyncio.run(returned_posts)
 
 
 def about(request):
@@ -95,7 +98,8 @@ class PublicationByTheme(DataMixin, ListView):
         return context
 
     def get_queryset(self):
-        return Publication.objects.filter(theme__slug=self.kwargs['theme_slug'], is_published=True)
+        publications_by_theme = get_publications_by_theme(self.kwargs['theme_slug'])
+        return asyncio.run(publications_by_theme)
 
     def get(self, request, *args, **kwargs):
         self.object_list = self.get_queryset()
@@ -196,7 +200,8 @@ class MyQuestions(DataMixin, ListView):
         return context
 
     def get_queryset(self):
-        return Publication.objects.filter(author=self.request.user)
+        user_questions = get_my_questions(self.request.user)
+        return asyncio.run(user_questions)
 
 
 def delete_post(request, post_slug):
