@@ -43,6 +43,22 @@ class AddCommentForm(forms.ModelForm):
             }
         }
 
+
+class AddThemeForm(forms.ModelForm):
+
+    class Meta:
+        model = Theme
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Напишите название темы'}),
+        }
+        error_messages = {
+            'name': {
+                'required': ("Тема не может быть пустая")
+            },
+        }
+
+
 class RegisterUserForm(UserCreationForm):
     username = forms.CharField(label='Имя пользователя', widget=forms.TextInput())
     password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput())

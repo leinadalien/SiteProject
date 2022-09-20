@@ -1,0 +1,21 @@
+{% extends 'forum/base.html' %}
+
+{% block content %}
+<div class="container-form">
+        <div class="container-form-title">
+                <h2>Добавление темы</h2>
+        </div>
+<form action="{% url 'add_theme' %}" method="post">
+        {% csrf_token %}
+
+        <div>{{form.non_field_errors}}</div>
+        {% for f in form %}
+        <div class="form-item">{{ f }}</div>
+        {% if f.errors %}
+                <div class="form-item-error">{{ f.errors }}</div>
+        {% endif %}
+        {% endfor %}
+        <div ><button class="submit-button" type="submit">Создать</button></div>
+</form>
+</div>
+{% endblock content %}

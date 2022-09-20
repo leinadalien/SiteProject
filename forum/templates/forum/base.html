@@ -84,7 +84,7 @@
 				</li>
 			{% endif %}
 				{% for theme in themes %}
-					{% if theme.pk == theme_selected %}
+					{% if theme.slug == theme_selected %}
 						<li class="theme-item theme-item-selected">
 							<div>
 								<p>{{theme.name}}</p>
@@ -97,9 +97,25 @@
 									<p>{{theme.name}}</p>
 								</div>
 							</a>
-						</li>
+							{% if user.is_staff %}
+								<a href="{% url 'delete_theme' theme.slug %}">
+									<div class="delete-theme-button">
+										<p>X</p>
+									</div>
+								</a>
+							{% endif %}
+							</li>
 					{% endif %}
 				{% endfor %}
+				{% if user.is_staff %}
+					<li class="post-button add-theme-button">
+						<a href="{% url 'add_theme' %}">
+								<div>
+									<p>Добавить тему</p>
+								</div>
+						</a>
+					</li>
+				{% endif %}
 			</ul>
 		</aside>
 

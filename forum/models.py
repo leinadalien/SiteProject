@@ -10,7 +10,7 @@ class Publication(models.Model):
     time_create = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     time_update = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
     is_published = models.BooleanField(default=True, verbose_name="Опубликовано")
-    theme = models.ForeignKey('Theme', on_delete=models.PROTECT, verbose_name="Тема")
+    theme = models.ForeignKey('Theme', on_delete=models.CASCADE, verbose_name="Тема")
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор', null=True)
     closed = models.BooleanField(default=False, verbose_name='Закрыт')
@@ -42,6 +42,11 @@ class Theme(models.Model):
     def get_absolute_url(self):
         return reverse('theme', kwargs={'theme_slug': self.slug})
 
+    def save(self, *args, **kwargs):
+        unique_slugify(self, self.name)
+
+        return super(Theme, self).save(*args, **kwargs)
+
     class Meta:
         verbose_name = 'Тема'
         verbose_name_plural = 'Темы'
@@ -54,7 +59,6 @@ class Comment(models.Model):
     content = models.TextField(verbose_name='Комментарий')
     time_create = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания", null=True)
     time_update = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
-
 
     def get_absolute_url(self):
         return reverse('comment', kwargs={'comment_id': self.pk})

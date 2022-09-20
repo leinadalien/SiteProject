@@ -18,6 +18,7 @@ class ForumHome(DataMixin, ListView):
     model = Publication
     template_name = 'forum/index.html'
     context_object_name = 'posts'
+    allow_empty = True
     paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -83,18 +84,42 @@ class PublicationByTheme(DataMixin, ListView):
     model = Publication
     template_name = 'forum/index.html'
     context_object_name = 'posts'
-    allow_empty = False
+    allow_empty = True
     paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(self.get_user_context())
-        context['title'] = context['posts'][0].theme
-        context['theme_selected'] = context['posts'][0].theme_id
+        context['title'] = kwargs['theme_name'].name
+        context['theme_selected'] = kwargs['theme_name'].slug
         return context
 
     def get_queryset(self):
         return Publication.objects.filter(theme__slug=self.kwargs['theme_slug'], is_published=True)
+
+    def get(self, request, *args, **kwargs):
+        self.object_list = self.get_queryset()
+        allow_empty = self.get_allow_empty()
+
+        if not allow_empty:
+            # When pagination is enabled and object_list is a queryset,
+            # it's better to do a cheap query than to load the unpaginated
+            # queryset in memory.
+            if self.get_paginate_by(self.object_list) is not None and hasattr(
+                    self.object_list, "exists"
+            ):
+                is_empty = not self.object_list.exists()
+            else:
+                is_empty = not self.object_list
+            if is_empty:
+                raise Http404(
+                    _("Empty list and “%(class_name)s.allow_empty” is False.")
+                    % {
+                        "class_name": self.__class__.__name__,
+                    }
+                )
+        context = self.get_context_data(theme_name=get_object_or_404(Theme, slug=self.kwargs['theme_slug']))
+        return self.render_to_response(context)
 
 
 class StartQuestion(LoginRequiredMixin, DataMixin, CreateView):
@@ -176,7 +201,7 @@ class MyQuestions(DataMixin, ListView):
 
 def delete_post(request, post_slug):
     post = get_object_or_404(Publication, slug=post_slug)
-    if request.user == post.author:
+    if request.user == post.author or request.user.is_staff:
         logger.info('удаление поста')
         post.delete()
         return redirect('my_questions')
@@ -186,10 +211,40 @@ def delete_post(request, post_slug):
 
 def close_post(request, post_slug):
     post = get_object_or_404(Publication, slug=post_slug)
-    if request.user == post.author:
+    if request.user == post.author or request.user.is_staff:
         logger.info('закрытие поста')
         post.closed = True
         post.save()
         return redirect('post', post_slug)
+    else:
+        raise Http404
+
+
+class AddTheme(LoginRequiredMixin, DataMixin, CreateView):
+    form_class = AddThemeForm
+    template_name = 'forum/add_theme.html'
+    login_url = reverse_lazy('add_theme')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(self.get_user_context())
+        context['title'] = 'Добавление темы'
+        return context
+
+    def form_valid(self, form):
+        if self.request.user.is_staff:
+            logger.info('Создание темы')
+            new_theme = form.save()
+            return redirect('theme', new_theme.slug)
+        else:
+            raise Http404
+
+
+def delete_theme(request, theme_slug):
+    theme = get_object_or_404(Theme, slug=theme_slug)
+    if request.user.is_staff:
+        logger.info('удаление темы')
+        theme.delete()
+        return redirect('main')
     else:
         raise Http404

@@ -344,11 +344,6 @@ select:focus {
     flex-direction: row;
 }
 
-.paginator > a {
-    flex-grow: 0;
-    flex-shrink: 0;
-}
-
 .page-pointer {
     display: flex;
     border-radius: 50%;
@@ -378,10 +373,13 @@ a .page-num:hover {
 }
 
 
-
+.post-bottom-data > a, li > a, .paginator > a {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
 
 #right-sidebar {
-    width: 200px;
+    width: auto;
     flex-grow: 0;
     background: #05964d;
     border-radius: 10px;
@@ -392,9 +390,12 @@ a .page-num:hover {
     flex-direction: column;
 }
 .theme-item {
-    display:block;
-    flex-grow: 1;
+    display:flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
     padding:10px;
+    justify-content: space-between;
 
 }
 .first-theme-item {
@@ -405,6 +406,30 @@ a .page-num:hover {
     font-weight: 600;
     color: #baffdd;
 }
+.add-theme-button {
+    margin: 10px 0px 10px 0px;
+    border-radius: 10px;
+    background: #08bd62;
+}
+.delete-theme-button {
+    display: flex;
+    border-radius: 10px;
+    background: #08bd62;
+    margin: 0px 0px 0px 10px;
+    width: 25px;
+    height: 25px;
+    background: #05964d;
+    align-items: center;
+    justify-content: center;
+    color: #baffdd;
+    font-size: 14px;
+}
+
+.delete-theme-button:hover {
+    background: #f33;
+    color: #850808;
+}
+
 footer {
     flex: 0 0 auto;
 }

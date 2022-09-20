@@ -47,6 +47,16 @@
     {% endif %}
 </div>
 {% else %}
+    {% if user.is_staff %}
+        <div class="post-manage-buttons">
+            {% if not post.closed %}
+                <a href="{% url 'close_post' post.slug %}"><div class="post-button close-post-button first-manage-button"><p>Закрыть</p></div></a>
+                <a href="{% url 'delete_post' post.slug %}"><div class="post-button delete-post-button last-manage-button"><P>Удалить</p></div></a>
+            {% else %}
+                <a href="{% url 'delete_post' post.slug %}"><div class="post-button delete-post-button first-manage-button last-manage-button"><p>Удалить</p></div></a>
+            {% endif %}
+        </div>
+    {% endif %}
     {% if not post.closed and request.user.is_authenticated %}
     <div class="container-form">
         <div class="container-form-title"><p>Оставить ответ</p></div>

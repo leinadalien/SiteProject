@@ -14,4 +14,6 @@ urlpatterns = [
     path('my-questions/', MyQuestions.as_view(), name='my_questions'),
     path('delete-post/<slug:post_slug>/', delete_post, name='delete_post'),
     path('close-post/<slug:post_slug>/', close_post, name='close_post'),
+    path('add-theme/', AddTheme.as_view(), name='add_theme'),
+    path('delete-theme/<slug:theme_slug>/', delete_theme, name='delete_theme')
 ]
