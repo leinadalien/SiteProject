@@ -211,7 +211,7 @@ def delete_post(request, post_slug):
 
 def close_post(request, post_slug):
     post = get_object_or_404(Publication, slug=post_slug)
-    if request.user == post.author or request.user.is_staff:
+    if not post.closed and (request.user == post.author or request.user.is_staff):
         logger.info('закрытие поста')
         post.closed = True
         post.save()
