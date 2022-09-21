@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-9#ivup-jb0(p^w1yzm8i8qel_54&w@b8=jp8y(fz=3j-f9-!p)
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
+    '*',
 ]
 
 
@@ -115,10 +115,20 @@ DATABASES = {
         'USER': 'lab34dbuser',
         'PASSWORD': '12345678',
         'HOST': 'localhost',
-        'PORT': '',
+        'PORT': '5432'
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ.get('POSTGRES_NAME'),
+#         'USER': os.environ.get('POSTGRES_USER'),
+#         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+#         'HOST': 'localhost',
+#         'PORT': 5432,
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
